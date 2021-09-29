@@ -41,4 +41,4 @@ router.post('/:id/posts', (req, res) => {
   // and another middleware to check that the request body is valid
 });
 
-// do not forget to export the router
+module.exports = router;
