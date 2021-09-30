@@ -15,8 +15,12 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:id', validateUserId, (req, res) => {
-  res.status(200).json(req.users)
+router.get('/:id', validateUserId, (req, res, next) => {
+  Users.get()
+    .then(() => {
+      res.status(200).json(req.users)
+    })
+    .catch(next)
 });
 
 router.post('/', validateUser, (req, res, next) => {
@@ -27,9 +31,9 @@ router.post('/', validateUser, (req, res, next) => {
     .catch(next);
 });
 
-router.put('/:id', validateUserId, validatePost, (req, res, next) => {
+router.put('/:id', validateUser, validatePost, (req, res, next) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
-  Posts.update(req.params.id, req.body)
+  Users.update(req.params.id, req.body)
     .then(user => {
       res.status(200).json(user);
     })

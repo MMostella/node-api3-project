@@ -14,7 +14,7 @@ async function validateUserId(req, res, next) {
       req.users = Users;
       next();
     } else {
-      next({ status: 404, message: `User not found with matching ID` })
+      next({ status: 404, message: `user not found` })
     }
   } catch (err) {
     next(err)
@@ -38,7 +38,7 @@ async function validateUser(req, res, next) {
     req.body = UserValidated;
     next();
   } catch (err) {
-    next({ status: 400, message: `Missing required text`})
+    next({ status: 400, message: `missing required name field`})
   }
 }
 
@@ -50,7 +50,11 @@ const postSchema = yup.object().shape({
     .required('Name is required')
     .min(3, 'Name must be no less than 3 characters long')
     .max(15, 'Name must be no longer than 10 characters')
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+  
+  user_id: yup
+    .string()
+    .required('User ID is required')
 })
 
 async function validatePost(req, res, next) {
@@ -59,7 +63,7 @@ async function validatePost(req, res, next) {
     req.body = postValidated;
     next();
   } catch (err) {
-    next({ status: 400, message: `Missing required text`})
+    next({ status: 400, message: `missing required text field`})
   }
 }
 
