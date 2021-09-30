@@ -31,11 +31,16 @@ router.post('/', validateUser, (req, res, next) => {
     .catch(next);
 });
 
-router.put('/:id', validateUser, validatePost, (req, res, next) => {
-  // RETURN THE FRESHLY UPDATED USER OBJECT
+router.put('/:id', validateUser, (req, res, next) => {
   Users.update(req.params.id, req.body)
     .then(user => {
-      res.status(200).json(user);
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(404).json({
+          message: `User not found`
+        })
+      }
     })
     .catch(next);
 });
