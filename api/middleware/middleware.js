@@ -1,36 +1,40 @@
-const yup = require('yup');
+const yup = require("yup");
 
-const User = require('../users/users-model');
+const User = require("../users/users-model");
 
 function logger(req, res, next) {
-  console.log(`it is a ${req.method} request to ${req.originalUrl}`)
-  next()
+  console.log(
+    `${new Date().toLocaleTimeString()} it is a ${req.method} request to ${
+      req.originalUrl
+    }`
+  );
+  next();
 }
 
 async function validateUserId(req, res, next) {
   try {
-    const Users = await User.getById(req.params.id)
+    const Users = await User.getById(req.params.id);
     if (Users) {
       req.users = Users;
       next();
     } else {
-      next({ status: 404, message: `user not found` })
+      next({ status: 404, message: `user not found` });
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
 }
 
 const userSchema = yup.object().shape({
   name: yup
     .string()
-    .typeError('Name must be a string')
+    .typeError("Name must be a string")
     .trim()
-    .required('Name is required')
-    .min(3, 'Name must be no less than 3 characters long')
-    .max(15, 'Name must be no longer than 10 characters')
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field ")
-})
+    .required("Name is required")
+    .min(3, "Name must be no less than 3 characters long")
+    .max(15, "Name must be no longer than 10 characters")
+    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
+});
 
 async function validateUser(req, res, next) {
   try {
@@ -38,7 +42,7 @@ async function validateUser(req, res, next) {
     req.body = UserValidated;
     next();
   } catch (err) {
-    next({ status: 400, message: `missing required name field`})
+    next({ status: 400, message: `missing required name field` });
   }
 }
 
@@ -46,10 +50,10 @@ const postSchema = yup.object().shape({
   text: yup
     .string()
     .trim()
-    .required('Name is required')
-    .min(3, 'Name must be no less than 3 characters long')
-    .max(100, 'Name must be no longer than 100 characters')
-})
+    .required("Name is required")
+    .min(3, "Name must be no less than 3 characters long")
+    .max(100, "Name must be no longer than 100 characters"),
+});
 
 async function validatePost(req, res, next) {
   try {
@@ -57,7 +61,7 @@ async function validatePost(req, res, next) {
     req.body = postValidated;
     next();
   } catch (err) {
-    next({ status: 400, message: `missing required text field`})
+    next({ status: 400, message: `missing required text field` });
   }
 }
 
@@ -65,5 +69,5 @@ module.exports = {
   logger,
   validateUserId,
   validatePost,
-  validateUser
-}
+  validateUser,
+};
