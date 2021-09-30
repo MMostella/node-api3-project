@@ -45,16 +45,10 @@ async function validateUser(req, res, next) {
 const postSchema = yup.object().shape({
   text: yup
     .string()
-    .typeError('Name must be a string')
     .trim()
     .required('Name is required')
     .min(3, 'Name must be no less than 3 characters long')
-    .max(15, 'Name must be no longer than 10 characters')
-    .matches(/^[aA-zZ\s]+$/, "Only alphabets are allowed for this field "),
-  
-  user_id: yup
-    .string()
-    .required('User ID is required')
+    .max(100, 'Name must be no longer than 100 characters')
 })
 
 async function validatePost(req, res, next) {

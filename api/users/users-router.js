@@ -47,9 +47,10 @@ router.put('/:id', validateUser, (req, res, next) => {
 
 router.delete('/:id', validateUserId, (req, res, next) => {
   // RETURN THE FRESHLY DELETED USER OBJECT
-  Posts.remove(req.params.id)
+  Users.remove(req.params.id)
     .then(() => {
-      res.status(200).json({ message: `Post is gone` });
+      res.status(200).json(req.users);
+      // console.log(req.users);
     })
     .catch(next);
 });
@@ -63,12 +64,11 @@ router.get('/:id/posts', validateUserId, (req, res, next) => {
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res, next) => {
-  const postInfo = { ...req.body, user_id: req.params.id}
-  Posts.insert(postInfo)
+  Posts.insert({ user_id: req.params.id, ...req.body })
     .then(post => {
-      res.status(210).json(post);
+      res.json(post)
     })
-    .catch(next);
+    .catch(next)
 });
 
 module.exports = router;
